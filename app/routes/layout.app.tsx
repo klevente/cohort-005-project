@@ -1,5 +1,6 @@
 import { Outlet } from "react-router";
 import type { Route } from "./+types/layout.app";
+import { useInboxPrototype } from "~/components/inbox-prototype";
 import { Sidebar } from "~/components/sidebar";
 import { DevUI } from "~/components/dev-ui";
 import { Toaster } from "sonner";
@@ -226,6 +227,7 @@ export default function AppLayout({ loaderData }: Route.ComponentProps) {
     countries,
     isTeamAdmin: userIsTeamAdmin,
   } = loaderData;
+  const inbox = useInboxPrototype(currentUser?.role ?? null, userIsTeamAdmin);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -233,10 +235,13 @@ export default function AppLayout({ loaderData }: Route.ComponentProps) {
         currentUser={currentUser}
         recentCourses={recentCourses}
         isTeamAdmin={userIsTeamAdmin}
+        inboxHeaderSlot={inbox.headerSlot}
+        inboxNavSlot={inbox.navSlot}
       />
       <main className="flex-1 overflow-y-auto">
-        <Outlet />
+        {inbox.mainOverride ?? <Outlet />}
       </main>
+      {inbox.overlay}
       <DevUI
         users={users}
         currentUser={currentUser}
