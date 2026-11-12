@@ -12,6 +12,10 @@ if (!course) throw data("Course not found", { status: 404 });
 The route then has one success path. A returned error shape gives every
 component a second path to forget about.
 
+The one exception is form input the user can correct, such as a comment or a
+Note that is empty or too long. The action returns `{ ok: false, error }` so
+the form can show the message beside the field the user is editing.
+
 ## Parse untrusted input with a schema
 
 Form data, search parameters and request bodies get a zod schema before the
