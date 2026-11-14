@@ -1,8 +1,8 @@
 import type { LucideIcon } from "lucide-react";
 import { BookOpen, GraduationCap, Layers, PlayCircle } from "lucide-react";
-import type { CatalogueStats as Stats } from "~/modules/landing";
+import type { CatalogueStats } from "~/modules/landing";
 
-export function CatalogueStats({ stats }: { stats: Stats }) {
+export function CatalogueFigures({ stats }: { stats: CatalogueStats }) {
   const items: { icon: LucideIcon; value: number; label: string }[] = [
     { icon: BookOpen, value: stats.courses, label: "Courses" },
     { icon: PlayCircle, value: stats.lessons, label: "Lessons" },

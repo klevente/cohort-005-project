@@ -5,7 +5,7 @@ import { users } from "~/db/schema";
 import { DevUI } from "~/components/dev-ui";
 import { LandingHeader } from "~/components/landing/landing-header";
 import { LandingHero } from "~/components/landing/landing-hero";
-import { CatalogueStats } from "~/components/landing/catalogue-stats";
+import { CatalogueFigures } from "~/components/landing/catalogue-figures";
 import { FeaturedCourses } from "~/components/landing/featured-courses";
 import { LandingFooter } from "~/components/landing/landing-footer";
 import { landing } from "~/modules/landing/index.server";
@@ -68,7 +68,7 @@ export default function Home({ loaderData }: Route.ComponentProps) {
     <div className="min-h-screen bg-background">
       <LandingHeader signedIn={signedIn} />
       <LandingHero spotlight={featuredCourses[0]} signedIn={signedIn} />
-      <CatalogueStats stats={stats} />
+      <CatalogueFigures stats={stats} />
       <FeaturedCourses courses={featuredCourses} />
       <LandingFooter signedIn={signedIn} />
       <DevUI
