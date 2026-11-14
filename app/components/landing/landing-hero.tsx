@@ -1,8 +1,9 @@
 import { Link } from "react-router";
-import { ArrowRight, BookOpen, User } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { CourseImage } from "~/components/course-image";
 import type { FeaturedCourse } from "~/modules/landing";
+import { CourseMeta } from "./course-meta";
 
 export function LandingHero({
   spotlight,
@@ -78,14 +79,7 @@ function Spotlight({ course }: { course: FeaturedCourse }) {
             {course.title}
           </h2>
           <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <User className="size-4" />
-              {course.instructorName}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <BookOpen className="size-4" />
-              {course.lessonCount} lessons
-            </span>
+            <CourseMeta course={course} size="lg" />
           </div>
         </div>
       </Link>

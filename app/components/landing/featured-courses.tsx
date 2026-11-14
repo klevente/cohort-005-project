@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { ArrowRight, BookOpen, User } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -9,6 +9,7 @@ import {
 } from "~/components/ui/card";
 import { CourseImage } from "~/components/course-image";
 import type { FeaturedCourse } from "~/modules/landing";
+import { CourseMeta } from "./course-meta";
 
 export function FeaturedCourses({ courses }: { courses: FeaturedCourse[] }) {
   if (courses.length === 0) return null;
@@ -59,14 +60,7 @@ function FeaturedCourseCard({ course }: { course: FeaturedCourse }) {
           </p>
         </CardContent>
         <CardFooter className="flex items-center justify-between text-xs text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <User className="size-3" />
-            {course.instructorName}
-          </span>
-          <span className="flex items-center gap-1">
-            <BookOpen className="size-3" />
-            {course.lessonCount} lessons
-          </span>
+          <CourseMeta course={course} size="sm" />
         </CardFooter>
       </Card>
     </Link>
