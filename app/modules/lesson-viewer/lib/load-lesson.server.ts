@@ -126,7 +126,6 @@ export async function loadLessonPage({
     // Progress is recorded only for people who can take the course, so a
     // Student under a Country Lock gets none.
     if (take.allowed) {
-      // Mark lesson as in-progress when viewed
       markLessonInProgress(currentUserId, lessonId);
       const progress = getLessonProgress(currentUserId, lessonId);
       lessonStatus = progress?.status ?? null;
