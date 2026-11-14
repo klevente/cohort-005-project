@@ -19,11 +19,20 @@ function statusOf(
   return "unsaved";
 }
 
-export function noteDraft(
-  typed: string,
-  saved: string | null,
-  limit: number
-): NoteDraft {
+/**
+ * Where a Student's note editor stands: how long the draft is, whether it
+ * differs from the saved note, and whether Save should be offered.
+ */
+export function describeNoteDraft({
+  draft: typed,
+  saved,
+  limit,
+}: {
+  draft: string;
+  /** The body last saved, or null when the Student has no note yet. */
+  saved: string | null;
+  limit: number;
+}): NoteDraft {
   // The server trims the body before it validates and stores it, so the draft
   // is judged by what would actually be saved.
   const draft = typed.trim();
