@@ -4,7 +4,6 @@ import * as schema from "~/db/schema";
 import { CourseStatus, UserRole } from "~/db/schema";
 import { markdown } from "~/lib/text";
 import { createLanding } from "../index.server";
-import { FEATURED_COURSE_LIMIT } from "../index";
 
 let db: TestDb;
 let landing: ReturnType<typeof createLanding>;
@@ -123,7 +122,6 @@ describe("landing.get", () => {
     });
 
     const titles = landing.get().featuredCourses.map((c) => c.title);
-    expect(FEATURED_COURSE_LIMIT).toBe(3);
     expect(titles).toEqual(["Course 05", "Course 04", "Course 03"]);
   });
 
