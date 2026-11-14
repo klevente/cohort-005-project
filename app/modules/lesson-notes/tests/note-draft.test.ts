@@ -63,4 +63,21 @@ describe("describeNoteDraft", () => {
     });
     expect(draft.status).toBe("too-long");
   });
+
+  it("is saved when the draft differs from the saved note only by surrounding whitespace", () => {
+    const draft = describeNoteDraft({
+      draft: "same\n",
+      saved: "same",
+      limit: 10,
+    });
+    expect(draft.status).toBe("saved");
+    expect(draft.canSave).toBe(false);
+  });
+
+  it("does not count surrounding whitespace against the limit", () => {
+    const draft = describeNoteDraft({ draft: "abcde\n", saved: "", limit: 5 });
+    expect(draft.length).toBe(5);
+    expect(draft.tooLong).toBe(false);
+    expect(draft.canSave).toBe(true);
+  });
 });

@@ -14,16 +14,19 @@ function statusOf(
   tooLong: boolean
 ): NoteDraftStatus {
   if (tooLong) return "too-long";
-  if (draft.trim().length === 0) return "empty";
+  if (draft.length === 0) return "empty";
   if (draft === saved) return "saved";
   return "unsaved";
 }
 
 export function noteDraft(
-  draft: string,
+  typed: string,
   saved: string | null,
   limit: number
 ): NoteDraft {
+  // The server trims the body before it validates and stores it, so the draft
+  // is judged by what would actually be saved.
+  const draft = typed.trim();
   const tooLong = draft.length > limit;
   const status = statusOf(draft, saved, tooLong);
   return {
