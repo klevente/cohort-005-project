@@ -81,9 +81,11 @@ export const INTENT_CAPABILITY: Record<string, Capability | undefined> = {
 export async function runLessonAction({
   params,
   request,
+  now,
 }: {
   params: { slug: string; lessonId: string };
   request: Request;
+  now: Date;
 }) {
   const formData = await request.formData();
   const intent = formData.get("intent");
@@ -122,7 +124,7 @@ export async function runLessonAction({
           lessonId,
           parsed.data.parentId ?? null,
           parsed.data.body,
-          new Date(),
+          now,
           await defaultNotifications()
         );
         if (!created.ok) return created;
@@ -145,7 +147,7 @@ export async function runLessonAction({
           parsed.data.commentId,
           currentUserId,
           parsed.data.body,
-          new Date()
+          now
         );
         if (!edited.ok) return edited;
         return { ok: true };
@@ -168,7 +170,7 @@ export async function runLessonAction({
         parsed.data.commentId,
         currentUserId,
         canModerate,
-        new Date(),
+        now,
         await defaultNotifications()
       );
       if (!deleted.ok) return deleted;
@@ -185,12 +187,7 @@ export async function runLessonAction({
 
   if (intent === "toggle-bookmark" || intent === "save-note") {
     if (intent === "toggle-bookmark") {
-      const bookmarked = toggleBookmark(
-        db,
-        currentUserId,
-        lessonId,
-        new Date()
-      );
+      const bookmarked = toggleBookmark(db, currentUserId, lessonId, now);
       return { ok: true, bookmarked };
     }
 
@@ -198,19 +195,13 @@ export async function runLessonAction({
     if (!parsed.success) {
       return { ok: false, error: parsed.errors.body };
     }
-    const saved = saveNote(
-      db,
-      currentUserId,
-      lessonId,
-      parsed.data.body,
-      new Date()
-    );
+    const saved = saveNote(db, currentUserId, lessonId, parsed.data.body, now);
     if (!saved.ok) return saved;
     return { ok: true };
   }
 
   if (intent === "mark-complete") {
-    markLessonComplete(currentUserId, lessonId);
+    markLessonComplete(currentUserId, lessonId, now);
     return { success: true };
   }
 

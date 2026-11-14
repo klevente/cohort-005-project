@@ -45,7 +45,7 @@ export function loader({ params, request }: Route.LoaderArgs) {
 }
 
 export function action({ params, request }: Route.ActionArgs) {
-  return runLessonAction({ params, request });
+  return runLessonAction({ params, request, now: new Date() });
 }
 
 type LessonLoaderData = Route.ComponentProps["loaderData"];
