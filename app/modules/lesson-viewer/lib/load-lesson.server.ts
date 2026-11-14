@@ -12,7 +12,7 @@ import { renderMarkdown } from "~/lib/markdown.server";
 
 import { data } from "react-router";
 
-import { lessonRef } from "./lesson-ref.server";
+import { lessonIdOf, lessonRef } from "./lesson-ref.server";
 import {
   calculateWatchProgress,
   getCourseWithDetails,
@@ -78,7 +78,7 @@ export async function loadLessonPage({
 
   const { course, person, enrolled, view, take, manage } = decisions;
   const currentUserId = person?.id ?? null;
-  const lessonId = Number(params.lessonId);
+  const lessonId = lessonIdOf(params);
 
   const courseWithDetails = getCourseWithDetails(course.id);
   const lesson = getLessonById(lessonId);

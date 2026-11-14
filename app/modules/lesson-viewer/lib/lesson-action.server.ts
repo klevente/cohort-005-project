@@ -21,7 +21,7 @@ import { data } from "react-router";
 import { z } from "zod";
 
 import { parseFormData } from "~/lib/validation";
-import { lessonRef } from "./lesson-ref.server";
+import { lessonIdOf, lessonRef } from "./lesson-ref.server";
 import { markLessonComplete } from "./course-data.server";
 import { getCommentById } from "./comment-thread.server";
 import { computeResult } from "./quiz.server";
@@ -47,6 +47,15 @@ export const saveNoteSchema = z.object({
       MAX_NOTE_LENGTH,
       `Your note is over ${MAX_NOTE_LENGTH.toLocaleString("en")} characters, so it was not saved.`
     ),
+});
+
+export const submitQuizSchema = z.object({
+  quizId: z.coerce.number().int(),
+});
+
+const quizAnswerSchema = z.object({
+  questionId: z.coerce.number().int(),
+  optionId: z.coerce.number().int(),
 });
 
 export const deleteCommentSchema = z.object({
@@ -94,7 +103,7 @@ export async function runLessonAction({
     ref
   );
   const currentUserId = person.id;
-  const lessonId = Number(params.lessonId);
+  const lessonId = lessonIdOf(params);
 
   if (
     intent === "create-comment" ||
@@ -206,10 +215,11 @@ export async function runLessonAction({
   }
 
   if (intent === "submit-quiz") {
-    const quizId = Number(formData.get("quizId"));
-    if (isNaN(quizId)) {
+    const parsedQuiz = parseFormData(formData, submitQuizSchema);
+    if (!parsedQuiz.success) {
       throw data("Invalid quiz ID", { status: 400 });
     }
+    const { quizId } = parsedQuiz.data;
     // Scope the quiz to this lesson so a quiz elsewhere can't be reached by
     // posting its id to this route.
     const quiz = db.select().from(quizzes).where(eq(quizzes.id, quizId)).get();
@@ -221,10 +231,12 @@ export async function runLessonAction({
     const selectedAnswers: Record<number, number> = {};
     for (const [key, value] of formData.entries()) {
       if (key.startsWith("question-")) {
-        const questionId = Number(key.replace("question-", ""));
-        const optionId = Number(value);
-        if (!isNaN(questionId) && !isNaN(optionId)) {
-          selectedAnswers[questionId] = optionId;
+        const answer = quizAnswerSchema.safeParse({
+          questionId: key.replace("question-", ""),
+          optionId: value,
+        });
+        if (answer.success) {
+          selectedAnswers[answer.data.questionId] = answer.data.optionId;
         }
       }
     }
