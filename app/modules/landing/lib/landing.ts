@@ -12,8 +12,7 @@ import {
 
 // ─── Landing ───
 // What the landing page shows: the newest published courses and a few
-// figures about the published catalogue. Drafts and archived courses never
-// count, and neither does a category with no published course in it.
+// figures about the published catalogue (see ADR-0014).
 
 export type Db = BetterSQLite3Database<typeof schema>;
 
